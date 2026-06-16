@@ -1,4 +1,7 @@
+"use client";
+
 import React from "react";
+import { usePathname } from "next/navigation";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
@@ -16,10 +19,16 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+  // The dispatch route is a full-bleed geospatial console: no padding, no
+  // max-width cap, and no inner scroll — the batch list sits flush against the
+  // sidebar and the map fills all remaining space.
+  const isFullBleed = pathname?.startsWith("/coop/dispatch");
+
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset>
+      <SidebarInset className={isFullBleed ? "overflow-hidden" : undefined}>
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1 text-primary hover:bg-surface-container" />
@@ -36,17 +45,25 @@ export default function DashboardLayout({
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Logistics Control</BreadcrumbPage>
+                  <BreadcrumbPage>
+                    {isFullBleed ? "Dispatch Control" : "Logistics Control"}
+                  </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
           </div>
         </header>
-        <div className="flex flex-1 flex-col p-4 pt-0">
-          <div className="mx-auto w-full max-w-7xl flex-1 flex flex-col gap-4">
-            {children}
+
+        {isFullBleed ? (
+          // Full-bleed content slot — children own the entire remaining area.
+          <div className="flex flex-1 overflow-hidden">{children}</div>
+        ) : (
+          <div className="flex flex-1 flex-col p-4 pt-0">
+            <div className="mx-auto w-full max-w-7xl flex-1 flex flex-col gap-4">
+              {children}
+            </div>
           </div>
-        </div>
+        )}
       </SidebarInset>
     </SidebarProvider>
   );
