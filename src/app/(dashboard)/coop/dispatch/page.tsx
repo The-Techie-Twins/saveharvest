@@ -56,9 +56,9 @@ export default function CoopDispatchPage() {
   };
 
   return (
-    <main className="flex-1 flex h-[calc(100vh-64px)] relative bg-background overflow-hidden">
+    <main className="flex flex-1 w-full overflow-hidden bg-background">
       {/* Urgent Batches Sidebar (30% width) */}
-      <div className="w-full md:w-[320px] lg:w-[380px] h-full bg-surface-bright border-r border-outline-variant flex flex-col z-10 shadow-sm shrink-0">
+      <div className="w-[320px] lg:w-[380px] flex-shrink-0 bg-surface-bright border-r border-outline-variant flex flex-col z-10 shadow-sm overflow-hidden">
         <div className="p-5 border-b border-outline-variant bg-surface-container-lowest sticky top-0 z-20">
           <h2 className="font-headline-md text-xl font-bold text-on-surface mb-1">
             Urgent Batches
@@ -193,8 +193,8 @@ export default function CoopDispatchPage() {
         </div>
       </div>
 
-      {/* Geospatial Map Area (70% width) */}
-      <div className="flex-1 relative bg-surface-dim overflow-hidden h-full flex flex-col justify-between">
+      {/* Geospatial Map Area — fills all remaining width and height */}
+      <div className="flex-1 relative bg-surface-dim overflow-hidden flex flex-col justify-between">
         
         {/* Map Background grid */}
         <div className="absolute inset-0 bg-surface-variant opacity-50 pointer-events-none" style={{ backgroundImage: "radial-gradient(#d8dadc 1px, transparent 1px)", backgroundSize: "20px 20px" }}></div>
