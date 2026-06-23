@@ -20,10 +20,29 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  // The dispatch route is a full-bleed geospatial console: no padding, no
-  // max-width cap, and no inner scroll — the batch list sits flush against the
-  // sidebar and the map fills all remaining space.
   const isFullBleed = pathname?.startsWith("/coop/dispatch");
+  const isBuyer = pathname?.startsWith("/buyer");
+  const isFleet = pathname?.startsWith("/fleet");
+
+  let breadcrumbHref = "/coop/dashboard";
+  let breadcrumbLabel = "SaveHarvest Console";
+  let pageLabel = isFullBleed ? "Dispatch Control" : "Logistics Control";
+
+  if (isBuyer) {
+    breadcrumbHref = "/buyer/marketplace";
+    breadcrumbLabel = "Buyer Console";
+    if (pathname.includes("/checkout")) pageLabel = "Checkout";
+    else if (pathname.includes("/orders")) pageLabel = "Active Orders";
+    else if (pathname.includes("/settings")) pageLabel = "Settings";
+    else pageLabel = "Marketplace";
+  } else if (isFleet) {
+    breadcrumbHref = "/fleet/dashboard";
+    breadcrumbLabel = "Fleet Console";
+    if (pathname.includes("/active-job")) pageLabel = "Active Job";
+    else if (pathname.includes("/history")) pageLabel = "History";
+    else if (pathname.includes("/settings")) pageLabel = "Settings";
+    else pageLabel = "Overview";
+  }
 
   return (
     <SidebarProvider>
@@ -39,14 +58,14 @@ export default function DashboardLayout({
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="/coop/dashboard">
-                    SaveHarvest Console
+                  <BreadcrumbLink href={breadcrumbHref}>
+                    {breadcrumbLabel}
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
                   <BreadcrumbPage>
-                    {isFullBleed ? "Dispatch Control" : "Logistics Control"}
+                    {pageLabel}
                   </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>

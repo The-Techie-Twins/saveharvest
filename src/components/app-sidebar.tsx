@@ -23,7 +23,8 @@ import {
   Bell,
   Sparkles,
   Store,
-  Receipt
+  Receipt,
+  History
 } from "lucide-react"
 import { usePathname } from "next/navigation"
 
@@ -37,6 +38,11 @@ const data = {
     name: "FreshMarket Inc.",
     email: "buyer@freshmarket.com",
     avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuDqI1wUZQZW1FhdzwXzv2QBltjZXfj65Xw6xS5yG2rbNcVIpkEro9zVme-j224KnzLnvxiVgzaJ-9zutaOt0d1T_9xd-zY_UYg2gZzoHTaKkhzNsbRKkBZIh84DULPjixiPRRJGujDU3_tb0yXwRwiQ52qAugnm37c-4_4D-GUwO4pqLEAOPVAsgH1aGyJIXtkE3iWk5VF5307o62t9OaB7DhTbN-QiEXqxHu4FgIMVtefCvKNEJBw_It9y96nWbT5UKYnybitetJHZ",
+  },
+  fleetUser: {
+    name: "John Doe",
+    email: "john.doe@podfresh.logistics",
+    avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuARynaaqWW3dgmf53Beq4mBfL1AYAWmiwgZUp3l0HQemPwRhfp9nS_OK1IlL5mKJyaIHminaZazcjj7PYCX5PloMnuqgF6AEVLim2Wo77gwNvsKKFlEXM0HLBFxs2UJqjQbcQ95gV4cEaeBYnpJZpnUgq7etdXSUs1bDjDTc8KkQavwEo4VqbDYy49bMmCWZ9_ipNvbwV6X_YuDIbfKhgUR6s27M9CSh98sAUi3WN6qKP3wlemP-04DjWexnGlEzGLUbommAiURZ9gj",
   },
   teams: [
     {
@@ -143,6 +149,53 @@ const data = {
       ],
     },
   ],
+  fleetNavMain: [
+    {
+      title: "Dashboard",
+      url: "/fleet/dashboard",
+      icon: <LayoutDashboard />,
+      isActive: true,
+      items: [
+        {
+          title: "Overview",
+          url: "/fleet/dashboard",
+        },
+      ],
+    },
+    {
+      title: "Active Job",
+      url: "/fleet/active-job",
+      icon: <Truck />,
+      items: [
+        {
+          title: "Current Route",
+          url: "/fleet/active-job",
+        },
+      ],
+    },
+    {
+      title: "History",
+      url: "/fleet/history",
+      icon: <History />,
+      items: [
+        {
+          title: "Earnings & Trips",
+          url: "/fleet/history",
+        },
+      ],
+    },
+    {
+      title: "Settings",
+      url: "/fleet/settings",
+      icon: <Settings />,
+      items: [
+        {
+          title: "Profile & Vehicle",
+          url: "/fleet/settings",
+        },
+      ],
+    },
+  ],
   projects: [
     {
       name: "Zero-waste Insights",
@@ -160,9 +213,18 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname()
   const isBuyer = pathname?.startsWith("/buyer")
+  const isFleet = pathname?.startsWith("/fleet")
 
-  const navItems = isBuyer ? data.buyerNavMain : data.coopNavMain
-  const currentUser = isBuyer ? data.buyerUser : data.coopUser
+  const navItems = isBuyer 
+    ? data.buyerNavMain 
+    : isFleet 
+    ? data.fleetNavMain 
+    : data.coopNavMain
+  const currentUser = isBuyer 
+    ? data.buyerUser 
+    : isFleet 
+    ? data.fleetUser 
+    : data.coopUser
 
   return (
     <Sidebar collapsible="icon" {...props}>
